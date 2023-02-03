@@ -5,3 +5,6 @@ exports.storeAll = require("./filecoin-market-consumer/store-all")
 exports.addCID = require("./deal-rewarder/add-cid")
 exports.fund = require("./deal-rewarder/fund")
 exports.claimBounty = require("./deal-rewarder/claim-bounty")
+exports.exists = require("./exists");
+exports.listAuctions = require("./list-auctions");
+exports.startNewAuction = require("./start-new-auction");

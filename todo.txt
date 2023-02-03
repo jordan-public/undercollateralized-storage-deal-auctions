@@ -1,0 +1,4 @@
+- Check if possible to list deal without provider
+
+Timestamp in seconds:
+duration + (new Date().getTime() / 1000)
