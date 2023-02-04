@@ -18,7 +18,7 @@ task(
         const tDeadline = taskArgs.realizationdeadline;
 
         const networkId = network.name
-        console.log("Checking for existance of deal on network", networkId);
+        console.log("Starting new auction.", networkId);
 
 
         //create a new wallet instance

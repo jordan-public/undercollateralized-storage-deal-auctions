@@ -8,7 +8,7 @@ task(
         const contractAddr = taskArgs.contract
         const dealid = taskArgs.dealid
         const networkId = network.name
-        console.log("Checking for existance of deal on network", networkId)
+        console.log("Listing auctions.", networkId)
 
         //create a new wallet instance
         const wallet = new ethers.Wallet(network.config.accounts[0], ethers.provider)
