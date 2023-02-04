@@ -4,3 +4,5 @@
 
 [Space Warp Summit 🛸 Programming on the FEVM - Zak Ayesh](https://www.youtube.com/watch?v=KcZbXSoUxz4)
 
+[FEVM Hardhat Kit](https://github.com/filecoin-project/FEVM-Hardhat-Kit)
+
