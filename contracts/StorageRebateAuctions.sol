@@ -66,7 +66,6 @@ contract StorageRebateAuctions is ReentrancyGuard {
 
     function isValid(uint256 auctionId) external view returns (bool) {
         return auctionId < auctions.length && !isCanceled(auctionId);
-//        return auctionId < auctions.length && auctions[auctionId].clientSecurityDeposit != 0;
     }
 
     function startNew(
@@ -125,8 +124,8 @@ contract StorageRebateAuctions is ReentrancyGuard {
     function setDealId(uint256 auctionId, uint64 dealId) external {
         // Client must enter dealId before deadline to prove that the deal was correctly activated
         // This must be done after activating the deal, otherwise client can lose security deposit and rebate
-        require(msg.sender == auctions[auctionId].clientFEVMaddress);
-        require(dealId == 0, "Cannot override once set");
+        require(msg.sender == auctions[auctionId].clientFEVMaddress, "Not authorized");
+        require(auctions[auctionId].dealId == 0, "Cannot override once set");
         require(block.timestamp > auctions[auctionId].closingTime, "Auction still active");
         require(block.timestamp <= auctions[auctionId].realizationDeadline, "Deadline passed");
         auctions[auctionId].dealId = dealId;

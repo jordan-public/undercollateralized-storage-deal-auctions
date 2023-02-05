@@ -11,3 +11,4 @@ exports.cancelAuction = require("./cancel-auction");
 exports.liquidateAuction = require("./liquidate-auction");
 exports.bid = require("./bid");
 exports.setAuctionDealId = require("./set-auction-dealid");
+exports.bal = require("./bal");
