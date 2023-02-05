@@ -2,25 +2,32 @@ task(
     "list-auctions",
     "Lists all auctions."
   )
-    .addParam("contract", "The address of the StorageRebateAuctions contract")
-    .setAction(async (taskArgs) => {
-        //store taskargs as useable variables
-        const contractAddr = taskArgs.contract
-        const dealid = taskArgs.dealid
-        const networkId = network.name
-        console.log("Listing auctions.", networkId)
-
-        //create a new wallet instance
-        const wallet = new ethers.Wallet(network.config.accounts[0], ethers.provider)
-
-        //create a DealRewarder contract factory
-        const StorageRebateAuctions = await ethers.getContractFactory("StorageRebateAuctions", wallet)
-        //create a DealRewarder contract instance 
-        //this is what you will call to interact with the deployed contract
-        const storageRebateAuctions = await StorageRebateAuctions.attach(contractAddr)
-        
-        //send a transaction to call claim_bounty() method
-        const auctionCount = await storageRebateAuctions.numAuctions();
-        console.log("Auction Count: ", auctionCount.toString());
-        console.log("Complete!")
-    })
+  .setAction(async (taskArgs) => {
+    const wallet = new ethers.Wallet(network.config.accounts[0], ethers.provider);
+    const StorageRebateAuctions = await ethers.getContractFactory("StorageRebateAuctions", wallet);
+    const storageRebateAuctions = await StorageRebateAuctions.attach(process.env.CONTRACT);
+    
+    //send a transaction to call claim_bounty() method
+    const auctionCount = await storageRebateAuctions.numAuctions();
+    
+    for (let i=0; i<auctionCount; i++) {
+      const auction = await storageRebateAuctions.auctions(i);
+      if (! auction.clientSecurityDeposit.isZero()) {
+        console.log("Auction ID:", i);
+        console.log("Piece CID:", auction.request.cidraw);
+        console.log("Size:", auction.request.size.toString());
+        console.log("Min duration:", auction.request.termDuration.toString());
+        console.log("clientFEVMaddress:", auction.clientFEVMaddress);
+        console.log("winningProviderFEVMaddress:", auction.winningProviderFEVMaddress);
+        console.log("winningProvider:", auction.winningProvider.toString());
+        console.log("clientSecurityDeposit:", auction.clientSecurityDeposit.toString());
+        console.log("minRebate:", auction.minRebate.toString());
+        console.log("rebate:", auction.rebate.toString());
+        console.log("minRebateIncrementRatio:", auction.minRebateIncrementRatio.toString());
+        console.log("closingTime:", new Date(parseInt(auction.closingTime.toString(),10) * 1000).toString());
+        console.log("realizationDeadline:", new Date(parseInt(auction.realizationDeadline.toString(),10) * 1000).toString());
+        console.log("dealId:", auction.dealId.toString());
+        console.log("");
+      }
+    }
+  })

@@ -1,27 +1,29 @@
+require("dotenv").config()
+
 task(
     "show-all",
     "Shows values collected in store-all."
   )
-    .addParam("contract", "The address of the FilecoinMarketConsumer contract")
     .setAction(async (taskArgs) => {
-        //store taskargs as useable variables
-        const contractAddr = taskArgs.contract
-        const dealID = taskArgs.dealid
-        const networkId = network.name
-        
-        //create a new wallet instance
-        const wallet = new ethers.Wallet(network.config.accounts[0], ethers.provider)
+        const CONTRACT = "0xa27edE780672870A0191360485606099Ab1A1490" // process.env.CONTRACT
 
-        //create a FilecoinMarketConsumer contract factory
+        //store taskargs as useable variables
+        const dealID = taskArgs.dealid
+        
+        const wallet = new ethers.Wallet(network.config.accounts[0], ethers.provider)
         const FilecoinMarketConsumer = await ethers.getContractFactory("FilecoinMarketConsumer", wallet)
-        //create a FilecoinMarketConsumer contract instance 
-        //this is what you will call to interact with the deployed contract
-        const filecoinMarketConsumer = await FilecoinMarketConsumer.attach(contractAddr)
+        const filecoinMarketConsumer = await FilecoinMarketConsumer.attach(CONTRACT)
         
         //send transaction to call storeAll() method
         console.log("dealLabel", await filecoinMarketConsumer.dealLabel());
         console.log("dealClientActorId", (await filecoinMarketConsumer.dealClientActorId()).toString());
         console.log("dealProviderActorId", (await filecoinMarketConsumer.dealProviderActorId()).toString());
         console.log("isDealActivated", await filecoinMarketConsumer.isDealActivated());
+        console.log("dealCommitment", (await filecoinMarketConsumer.dealCommitment()).toString());
+        console.log("dealTerm", (await filecoinMarketConsumer.dealTerm()).toString());
+        console.log("dealPricePerEpoch", (await filecoinMarketConsumer.dealPricePerEpoch()).toString());
+        console.log("clientCollateral", (await filecoinMarketConsumer.clientCollateral()).toString());
+        console.log("providerCollateral", (await filecoinMarketConsumer.providerCollateral()).toString());
+        console.log("activationStatus", (await filecoinMarketConsumer.activationStatus()).toString());
         console.log("Complete!")
     })

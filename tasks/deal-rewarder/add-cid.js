@@ -30,7 +30,7 @@ task(
         console.log("Hex bytes are:", cidHex)
         
         //send a transaction to call addCID() method
-        transaction = await dealRewarder.addCID(cidHex, size)
+        const transaction = await dealRewarder.addCID(cidHex, size)
         transaction.wait()
        
         console.log("Complete!")

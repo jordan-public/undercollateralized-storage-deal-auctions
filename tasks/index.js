@@ -1,6 +1,4 @@
-exports.getBalance = require("./simple-coin/get-balance")
-exports.getAddress = require("./get-address")
-exports.sendCoin = require("./simple-coin/send-coin")
+// exports.getAddress = require("./get-address")
 exports.storeAll = require("./filecoin-market-consumer/store-all")
 exports.showAll = require("./filecoin-market-consumer/show-all")
 exports.addCID = require("./deal-rewarder/add-cid")
@@ -9,3 +7,7 @@ exports.claimBounty = require("./deal-rewarder/claim-bounty")
 exports.exists = require("./exists");
 exports.listAuctions = require("./list-auctions");
 exports.startNewAuction = require("./start-new-auction");
+exports.cancelAuction = require("./cancel-auction");
+exports.liquidateAuction = require("./liquidate-auction");
+exports.bid = require("./bid");
+exports.setAuctionDealId = require("./set-auction-dealid");

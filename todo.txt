@@ -1,4 +1,7 @@
 - Check if possible to list deal without provider
+- Auction participant reputation score
+- Notifications
+- Selected Provider list
 
 Timestamp in seconds:
 duration + (new Date().getTime() / 1000)
