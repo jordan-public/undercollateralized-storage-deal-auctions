@@ -36,7 +36,7 @@ task(
     const transaction = await storageRebateAuctions.startNew(piececid, size, duration, minRebate, incr,
                                                               tClosing * 60 + Math.floor(new Date().getTime() / 1000),
                                                               tDeadline * 60 + Math.floor(new Date().getTime() / 1000),
-                                                              {gasLimit: 1000000000, value: secdep});
+                                                              {gasLimit: 100000000, value: secdep});
     const receipt = await transaction.wait();
     console.log("Complete!")
   })

@@ -79,6 +79,7 @@ contract StorageRebateAuctions is ReentrancyGuard {
     ) external payable returns (uint256 auctionId) {
         require(closingTime > block.timestamp, "Bad closing time");
         require(realizationDeadline > closingTime, "Bad realization deadline");
+        require(minRebateIncrementRatio > 1 ether, "Bids must increase");
         require(msg.value > 0, "No security deposit");
         auctionId = auctions.length;
         auctions.push();
@@ -100,9 +101,9 @@ contract StorageRebateAuctions is ReentrancyGuard {
         require(block.timestamp <= auctions[auctionId].closingTime, "Auction ended");
         require(msg.value >= auctions[auctionId].minRebate, "Min rebate");
         require(auctions[auctionId].rebate == 0 || msg.value >= auctions[auctionId].rebate * auctions[auctionId].minRebateIncrementRatio / 1 ether, "Min increment"); // 1 ether = 10**18
-        require(auctions[auctionId].clientSecurityDeposit != 0, "Auction canceled");
+        require(!isCanceled(auctionId), "Auction canceled");
 
-        auctions[auctionId].winningProviderFEVMaddress.transfer(auctions[auctionId].rebate); // Repay losing bidder
+        if (auctions[auctionId].winningProviderFEVMaddress != address(0)) auctions[auctionId].winningProviderFEVMaddress.transfer(auctions[auctionId].rebate); // Repay losing bidder
 
         auctions[auctionId].winningProviderFEVMaddress = payable(msg.sender);
         auctions[auctionId].winningProvider = provider;

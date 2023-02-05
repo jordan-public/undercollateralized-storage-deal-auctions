@@ -6,3 +6,5 @@
 
 [FEVM Hardhat Kit](https://github.com/filecoin-project/FEVM-Hardhat-Kit)
 
+[Hyperspace FEVM Faucet](https://hyperspace.yoga/#faucet)
+

@@ -11,7 +11,7 @@ task(
     const StorageRebateAuctions = await ethers.getContractFactory("StorageRebateAuctions", wallet);
     const storageRebateAuctions = await StorageRebateAuctions.attach(process.env.CONTRACT)
        
-    const transaction = await storageRebateAuctions.cancel(auctionid);
+    const transaction = await storageRebateAuctions.cancel(auctionid, {gasLimit: 100000000});
     const receipt = await transaction.wait();
     console.log("Auction", auctionid, "canceled!");
   })
