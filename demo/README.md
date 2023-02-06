@@ -1,5 +1,9 @@
 Demo 
 
+The demo video can be found [here](../doc/USDA%20FVM%20Space%20Warp%20Hackathon%20Presentation.mp4)
+
+Belpow is the sequence of commands issued in the above demo video.
+
 No auctions yet:
 ```
 hh list-auctions
