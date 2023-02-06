@@ -63,3 +63,8 @@ Set auction deal id:
 ```
 hh set-auction-dealid --auctionid 797 --dealid 3
 ```
+
+Check FIL balance:
+```
+hh bal
+```
