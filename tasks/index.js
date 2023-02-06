@@ -1,9 +1,4 @@
 // exports.getAddress = require("./get-address")
-exports.storeAll = require("./filecoin-market-consumer/store-all")
-exports.showAll = require("./filecoin-market-consumer/show-all")
-exports.addCID = require("./deal-rewarder/add-cid")
-exports.fund = require("./deal-rewarder/fund")
-exports.claimBounty = require("./deal-rewarder/claim-bounty")
 exports.exists = require("./exists");
 exports.listAuctions = require("./list-auctions");
 exports.startNewAuction = require("./start-new-auction");
