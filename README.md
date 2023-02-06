@@ -1,7 +1,28 @@
-Check if auction exists:
+# Undercollateralized Storage Deal Auctions
+
+The Filecoin storage providers offer published prices, yet they are reluctant to change these prices too often, so the storage clients can see reliable pricing. However, as the market conditions change quickly from current supply and demand as well as the price of FIL, it is beneficial to both the clients and the storage providers to have more flexible pricing. 
+
+This auction marketplace can mitigate the above problem. 
+
+In addition, the auctions can serve as a good venue for the storage clients and providers to find each other.
+
+Each auction occurs before the Filecoin deals are published. The auction workflow is as follows:
+
+1. Client starts auction with specifics: data cid, size, min. duration, etc. Upon creation of the auction the client also places a security deposit held by the protocol. The auction can be canceled by the client before the first bid is issued.
+2. Providers bid, increasing rebates. Each bidder deposits the rebate in the protocol. As the new highest bidder arrives, the protocol refunds the rebate to the previous highest bidder.
+3. After auction end and before deadline client must activate deal. At this time the deal shows in the Filecoin registry and is visible in the Filecoin explorers.
+4. After deadline auction can be liquidated. Either:
+    - The correct deal was activated and client gets the rebate, or
+    - Client loses the security deposit
+
+See the file ```.env.example``` to set up the proper private keys and auction contract address in the file ```.env```.
+
+The contract is deployed on the Filecoin EVM using command:
 ```
-hh exists --contract "0xdFbFBD5f5d3f1805FAA3f085b0a52416bc40863d" --dealid 863
+hh deploy
 ```
+
+Here is the list of commands used to operate the auctions:
 
 Start new auction (hex piece CID):
 ```
@@ -23,21 +44,6 @@ hh list-auctions
 
 ```
 
-Switch to Account1 (0x8B5c5694E93aDc4607221F5b3bc6f1BBfbd8fB57):
-```
-cp .env.account1 .env
-```
-
-Switch to Account2 (0x24652C001E3f1Bfe140aF69c31a499F332Dd4D2D):
-```
-cp .env.account2 .env
-```
-
-Switch to Account3 (0x440BF886fF4Ee666F17F232dD4F2deeba3dcDf4C):
-```
-cp .env.account3 .env
-```
-
 Cancel auction (before first bid):
 ```
 hh cancel-auction --auctionid 797
@@ -55,5 +61,5 @@ hh bid --auctionid 797 --provider 1000 --amount "10000000000000000"
 
 Set auction deal id:
 ```
-hh set-auction-dealid --auctionid 797 --dealid 1000
+hh set-auction-dealid --auctionid 797 --dealid 3
 ```
