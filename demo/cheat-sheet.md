@@ -25,14 +25,14 @@ Storage provider 1 (account 2) bids 1 FIL:
 ```
 cp .env.account2 .env
 
-hh bid --auctionid 2 --provider 1001 --amount "1000000000000000000"
+hh bid --auctionid 3 --provider 1001 --amount "1000000000000000000"
 ```
 
 Storage provider 2 (account 3) bids 2 FIL:
 ```
 cp .env.account3 .env
 
-hh bid --auctionid 2 --provider 1000 --amount "2000000000000000000"
+hh bid --auctionid 3 --provider 1000 --amount "2000000000000000000"
 ```
 
 See the auction status (winning bidder is the storage client 2):
@@ -49,14 +49,14 @@ Client (account 1) sets up and activates deal:
 ```
 cp .env.account1 .env
 
-hh set-auction-dealid --auctionid 2 --dealid 3
+hh set-auction-dealid --auctionid 3 --dealid 3
 ```
 
 Anyone (but in this case the storage client liquidates the auction. This distributes the winning provider's rebate to the storage client and also refunds the security deposit):
 ```
 hh bal
 
-hh liquidate-auction --auctionid 2
+hh liquidate-auction --auctionid 3
 
 hh bal
 ```
