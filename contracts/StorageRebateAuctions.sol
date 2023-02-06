@@ -6,7 +6,15 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.
 import {MarketAPI} from "@zondax/filecoin-solidity/contracts/v0.8/MarketAPI.sol";
 import {MarketTypes} from "@zondax/filecoin-solidity/contracts/v0.8/types/MarketTypes.sol";
 
+// PUSH Comm Contract Interface
+interface IPUSHCommInterface {
+    function sendNotification(address _channel, address _recipient, bytes calldata _identity) external;
+}
+
 contract StorageRebateAuctions is ReentrancyGuard {
+    // EPNS COMM ADDRESS ON ETHEREUM KOVAN, CHECK THIS: https://docs.epns.io/developers/developer-tooling/epns-smart-contracts/epns-contract-addresses
+    address public EPNS_COMM_ADDRESS = 0x87da9Af1899ad477C67FeA31ce89c1d2435c77DC;
+
     struct ReqDescr {
         bytes cidraw; 
         uint256 size;        
@@ -103,11 +111,45 @@ contract StorageRebateAuctions is ReentrancyGuard {
         require(auctions[auctionId].rebate == 0 || msg.value >= auctions[auctionId].rebate * auctions[auctionId].minRebateIncrementRatio / 1 ether, "Min increment"); // 1 ether = 10**18
         require(!isCanceled(auctionId), "Auction canceled");
 
-        if (auctions[auctionId].winningProviderFEVMaddress != address(0)) auctions[auctionId].winningProviderFEVMaddress.transfer(auctions[auctionId].rebate); // Repay losing bidder
+        if (auctions[auctionId].winningProviderFEVMaddress != address(0)) {
+            auctions[auctionId].winningProviderFEVMaddress.transfer(auctions[auctionId].rebate); // Repay losing bidder
+            IPUSHCommInterface(EPNS_COMM_ADDRESS).sendNotification(
+                0x8B5c5694E93aDc4607221F5b3bc6f1BBfbd8fB57, // from channel
+                auctions[auctionId].winningProviderFEVMaddress, // to recipient, put address(this) in case you want Broadcast or Subset. For Targetted put the address to which you want to send
+                bytes(
+                    string(
+                        // We are passing identity here: https://docs.epns.io/developers/developer-guides/sending-notifications/advanced/notification-payload-types/identity/payload-identity-implementations
+                        abi.encodePacked(
+                            "0", // this is notification identity: https://docs.epns.io/developers/developer-guides/sending-notifications/advanced/notification-payload-types/identity/payload-identity-implementations
+                            "+", // segregator
+                            "3", // this is payload type: https://docs.epns.io/developers/developer-guides/sending-notifications/advanced/notification-payload-types/payload (1, 3 or 4) = (Broadcast, targetted or subset)
+                            "+", // segregator
+                            "High Bidder Alert", // notificaiton title
+                            "+", // segregator
+                            "The new bidder is: ", addressToString(msg.sender), "." // notification body
+                        )
+                    )
+                )
+            );
+        }
 
         auctions[auctionId].winningProviderFEVMaddress = payable(msg.sender);
         auctions[auctionId].winningProvider = provider;
         auctions[auctionId].rebate = msg.value;
+    }
+
+    // Helper function to convert address to string
+    function addressToString(address _address) internal pure returns(string memory) {
+        bytes32 _bytes = bytes32(uint256(uint160(_address)));
+        bytes memory HEX = "0123456789abcdef";
+        bytes memory _string = new bytes(42);
+        _string[0] = '0';
+        _string[1] = 'x';
+        for(uint i = 0; i < 20; i++) {
+            _string[2+i*2] = HEX[uint8(_bytes[i + 12] >> 4)];
+            _string[3+i*2] = HEX[uint8(_bytes[i + 12] & 0x0f)];
+        }
+        return string(_string);
     }
 
     function cancel(uint256 auctionId) external nonReentrant {
