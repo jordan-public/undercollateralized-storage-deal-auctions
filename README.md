@@ -1,3 +1,5 @@
+[This project](https://ethglobal.com/showcase/undercollateralized-storage-deal-auctions-j8xkt) was created at the [FVM Space Warp 2023](https://ethglobal.com/events/spacewarp) hackathon.
+
 # Undercollateralized Storage Deal Auctions
 
 The Filecoin storage providers offer published prices, yet they are reluctant to change these prices too often, so the storage clients can see reliable pricing. However, as the market conditions change quickly from current supply and demand as well as the price of FIL, it is beneficial to both the clients and the storage providers to have more flexible pricing. 
